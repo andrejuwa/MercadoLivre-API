@@ -1,13 +1,14 @@
-Essa APLICAÇÂO tem como intuito para servir para a comunidade um intermedirio entre o MercadoLivre e a aplicação, e claro para ser reaproveitado seu codigo fonte ou pelo menos alguma parte :)
+<p>Essa APLICAÇÂO tem como intuito para servir para a comunidade um intermedirio entre o MercadoLivre e a aplicação, e claro para ser reaproveitado seu codigo fonte ou pelo menos alguma parte :)
 
 Observações iniciais para quem quiser rodar a aplicação localmente:
     Para iniciar com a utilização é necessario rodar o Migrate do Laravel para a criação do banco de dados, e para isso é importante que o .env esteja préviamente configurado.
     Importante que voce tenha sua propia central.dev do mercado livre e configure da seguinte forma no arquivo .env
+</p>
 
         APP_ID=
         YOUR_URL=
         SECRET_KEY=
-        
+
     Todas essas infomrações acima a API do mercadolivre irá disponibilizar pra voce de forma simples, porem um pouco burocratica vizando sua segurança. Mas vá na fé, tudo vai dar certo :)
 Links para a utilização:
     http://187.109.230.63:8000/api/auth/get_link - Usar via POST com um paramentro STATE com um codigo aleatorio acima de 16 e abaixo de 254 caracteres para obterção de um LINK para usar WEB e fazer a atenticação da sua conta
