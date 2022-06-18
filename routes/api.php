@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\http\controllers\controller;
+use App\http\controllers\MercadoLivreAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/auth', [MercadoLivreAuthController::class, 'index']);
+Route::get('/auth/code', [MercadoLivreAuthController::class, 'get_code']);
 Route::get('/product', [MercadoLivreProductController::class, 'index']);
 Route::get('/sale', [MercadoLivreSaleController::class, 'index']);
