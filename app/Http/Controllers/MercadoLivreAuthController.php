@@ -26,6 +26,14 @@ class MercadoLivreAuthController extends Controller
             return ["status"=>"error","message"=>"My system is crashed, please retry later"];  
         }
     }
+    public function verify_already_exist_state_code($random_id){
+        $test = DB::table("mercado_livre_user")->where('state', $random_id)->first();
+        if(empty($test)){
+            return ["status"=>false];//noexist
+        }else{
+            return ["status"=>true];//exist
+        }
+    }
     public function get_link(){
         if($_POST["random_id"]){
             $random_id = $_POST["random_id"];
@@ -35,9 +43,9 @@ class MercadoLivreAuthController extends Controller
             }
         }
         
-        $test = DB::table("mercado_livre_user")->where('state', $random_id)->first();
+        $verify_already_exist_status_code = MercadoLivreAuthController::verify_already_exist_state_code($random_id);
         $link_auth = "https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=".env("APP_ID")."&redirect_uri=".env("YOUR_URL")."&state=$random_id";
-        if(!empty($test)){
+        if($verify_already_exist_status_code['status'] == true){
             return [
                 "status"=>"error",
                 "message"=>"wow, are you trying to cheat on me? This code has already been used... But, is here your link",
@@ -52,9 +60,25 @@ class MercadoLivreAuthController extends Controller
             
         ];
     }
-    public function get_code(){
-            if((!$_GET["state"])||(strlen($_GET["state"])<16)){
-                return "My friend, this State is very bad or null";
+    public function get_first_code(){
+            if(!empty($_GET["state"])){
+                $random_id = $_GET["state"];
+                $Veryfy_random_id = MercadoLivreAuthController::Veryfy_random_id($random_id);
+                if(!empty($Veryfy_random_id)){
+                    return $Veryfy_random_id;
+                }
+            }else{
+                $Veryfy_random_id = MercadoLivreAuthController::Veryfy_random_id(NULL);
+                if(!empty($Veryfy_random_id)){
+                    return $Veryfy_random_id;
+                }
+            }
+            $verify_already_exist_status_code = MercadoLivreAuthController::verify_already_exist_state_code($random_id);
+            if($verify_already_exist_status_code['status'] == false){
+                return [
+                    "status"=>"error", 
+                    "message"=>"hey brother, the state was not generated from my system, what are you doing?" 
+                ];
             }
             $ch = curl_init();
 
@@ -68,15 +92,22 @@ class MercadoLivreAuthController extends Controller
             $headers[] = 'Content-Type: application/x-www-form-urlencoded';
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-            $result = curl_exec($ch);
+            $result = json_decode(curl_exec($ch));
             if (curl_errno($ch)) {
                 echo 'Error:' . curl_error($ch);
             }
             curl_close($ch);
-            $result = json_decode($result);
-            if(!empty($result->access_token)){
-                $user = DB::table('mercado_livre_user')->insert([
-                    'state'=>$_GET["state"],
+            if(!empty($result->message)){
+                echo $result->message . "<br>";
+                if($result->message == "Error validating grant. Your authorization code or refresh token is invalid"){
+                    return [
+                        "status"=>"error", 
+                        "message"=>"hey brother, The MercadoLivre doesn't like what you're doing. Are you trying to bypass the system? Be honest and don't repeat!" 
+                    ];
+                }
+                //MercadoLivreAuthController::first_Auth();
+            }elseif(!empty($result->access_token)){
+                $user = DB::table('mercado_livre_user')->where('state',$random_id)->update([
                     'access_token'=>$result->access_token,
                     'token_type'=>$result->token_type,
                     'expires_in'=>time()+$result->expires_in,
@@ -84,9 +115,11 @@ class MercadoLivreAuthController extends Controller
                     'user_id'=>$result->user_id,
                     'refresh_token'=>$result->refresh_token
                 ]);
-            }elseif(!empty($result->message)){
-                echo $result->message . "<br>";
-                MercadoLivreAuthController::first_Auth();
+                return [
+                    "status"=>"success", 
+                    "message"=>"Your code has been generated successfully. Can you close this windows",
+                    'refresh_token'=>$result->refresh_token
+                ];
             }
     }
     

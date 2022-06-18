@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/auth/get_link', [MercadoLivreAuthController::class, 'get_link']);
-Route::get('/auth/code', [MercadoLivreAuthController::class, 'get_code']);
+Route::get('/auth/code', [MercadoLivreAuthController::class, 'get_first_code']);
 Route::get('/product', [MercadoLivreProductController::class, 'index']);
 Route::get('/sale', [MercadoLivreSaleController::class, 'index']);
