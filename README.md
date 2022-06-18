@@ -4,9 +4,9 @@ Observações iniciais para quem quiser rodar a aplicação localmente:
     Para iniciar com a utilização é necessario rodar o Migrate do Laravel para a criação do banco de dados, e para isso é importante que o .env esteja préviamente configurado.
     Importante que voce tenha sua propia central.dev do mercado livre e configure da seguinte forma no arquivo .env
 
-    APP_ID=
-    YOUR_URL=
-    SECRET_KEY=
+        APP_ID=
+        YOUR_URL=
+        SECRET_KEY=
 
     Todas essas infomrações acima a API do mercadolivre irá disponibilizar pra voce de forma simples, porem um pouco burocratica vizando sua segurança. Mas vá na fé, tudo vai dar certo :)
 Links para a utilização:
