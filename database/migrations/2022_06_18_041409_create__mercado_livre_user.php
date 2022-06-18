@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('_mercado_livre_user', function (Blueprint $table) {
+        Schema::create('mercado_livre_user', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('state')->unique();
+            $table->string('access_token')->nullable();
+            $table->string('token_type')->nullable();
+            $table->string('expires_in')->nullable();
+            $table->string('scope')->nullable();
+            $table->string('user_id')->nullable();
+            $table->string('refresh_token')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_mercado_livre_user');
+        Schema::dropIfExists('mercado_livre_user');
     }
 };
