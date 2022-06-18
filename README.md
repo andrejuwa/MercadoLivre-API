@@ -3,7 +3,7 @@
 <p>Observações iniciais para quem quiser rodar a aplicação localmente:</p>
     <p>Para iniciar com a utilização é necessario rodar o Migrate do Laravel para a criação do banco de dados, e para isso é importante que o .env esteja préviamente configurado.</p>
     <p>Importante que voce tenha sua propia central.dev do mercado livre e configure da seguinte forma no arquivo .env</p>
-</p>
+
         APP_ID=
         YOUR_URL=
         SECRET_KEY=
